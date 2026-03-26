@@ -1,0 +1,13 @@
+@startuml
+title Colors LAMP Web App - Use Case Diagram
+
+actor User
+
+rectangle "Colors Web Application" {
+    User --> (Register Account)
+    User --> (Login)
+    User --> (Add Color)
+    User --> (Search Colors)
+}
+
+@enduml

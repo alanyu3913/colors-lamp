@@ -1,0 +1,34 @@
+@startuml
+title Add/Search/Login Flow - Colors App
+
+start
+
+:User opens website;
+
+:User enters login + password;
+
+:Send JSON to login.php;
+
+if (Valid credentials?) then (Yes)
+    :Receive user ID;
+    :Store user session;
+
+    if (User action?) then (Add Color)
+        :Enter color name;
+        :Send JSON (color, userId) to addcolor.php;
+        :PHP inserts into Colors table;
+        :Return success;
+
+    elseif (Search Colors)
+        :Enter search term;
+        :Send JSON (search, userId) to searchcolors.php;
+        :Query database using LIKE;
+        :Return matching colors;
+    endif
+
+else (No)
+    :Display error "No Records Found";
+endif
+
+stop
+@enduml

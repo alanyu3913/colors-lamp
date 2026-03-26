@@ -1,0 +1,62 @@
+@startuml
+title Colors LAMP Web App - Class Diagram (Accurate to Implementation)
+
+class User {
+    +ID: int
+    +FirstName: string
+    +LastName: string
+    +Login: string
+    +Password: string
+}
+
+class Color {
+    +ID: int
+    +Name: string
+    +UserID: int
+}
+
+class LoginAPI {
+    +getRequestInfo()
+    +returnWithError(err)
+    +returnWithInfo(firstName, lastName, id)
+}
+
+class AddColorAPI {
+    +getRequestInfo()
+    +returnWithError(err)
+}
+
+class SearchColorsAPI {
+    +getRequestInfo()
+    +returnWithError(err)
+    +returnWithInfo(results)
+}
+
+class Database {
+    +connect()
+    +prepare()
+    +execute()
+}
+
+class Frontend {
+    +login()
+    +addColor()
+    +searchColors()
+}
+
+' Relationships
+User "1" --> "0..*" Color : owns
+
+LoginAPI --> User
+AddColorAPI --> Color
+SearchColorsAPI --> Color
+
+LoginAPI --> Database
+AddColorAPI --> Database
+SearchColorsAPI --> Database
+
+Frontend --> LoginAPI
+Frontend --> AddColorAPI
+Frontend --> SearchColorsAPI
+
+@enduml
