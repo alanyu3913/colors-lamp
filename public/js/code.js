@@ -5,6 +5,21 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+function buildLoginPayload(login, password)
+{
+	return JSON.stringify({ login: login, password: password });
+}
+
+function buildAddColorPayload(color, ownerUserId)
+{
+	return JSON.stringify({ color: color, userId: ownerUserId });
+}
+
+function formatColorResults(results)
+{
+	return results.join("<br />\r\n");
+}
+
 function doLogin()
 {
 	userId = 0;
@@ -17,9 +32,8 @@ function doLogin()
 	
 	document.getElementById("loginResult").innerHTML = "";
 
-	let tmp = {login:login,password:password};
-//	var tmp = {login:login,password:hash};
-	let jsonPayload = JSON.stringify( tmp );
+	let jsonPayload = buildLoginPayload(login, password);
+//	let jsonPayload = buildLoginPayload(login, hash);
 	
 	let url = urlBase + '/Login.' + extension;
 
@@ -113,8 +127,7 @@ function addColor()
 	let newColor = document.getElementById("colorText").value;
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
-	let jsonPayload = JSON.stringify( tmp );
+	let jsonPayload = buildAddColorPayload(newColor, userId);
 
 	let url = urlBase + '/AddColor.' + extension;
 	
@@ -162,16 +175,8 @@ function searchColor()
 			{
 				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
-				
-				for( let i=0; i<jsonObject.results.length; i++ )
-				{
-					colorList += jsonObject.results[i];
-					if( i < jsonObject.results.length - 1 )
-					{
-						colorList += "<br />\r\n";
-					}
-				}
-				
+
+				colorList = formatColorResults(jsonObject.results);
 				document.getElementsByTagName("p")[0].innerHTML = colorList;
 			}
 		};
@@ -182,4 +187,14 @@ function searchColor()
 		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 	
+}
+
+if (typeof module !== 'undefined' && module.exports)
+{
+	module.exports = {
+		buildAddColorPayload,
+		buildLoginPayload,
+		formatColorResults,
+		searchColor
+	};
 }
